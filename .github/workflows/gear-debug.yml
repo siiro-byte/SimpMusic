@@ -1,0 +1,33 @@
+name: Build debug APK (gear visualizer)
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'gear-visualizer'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: 'recursive'
+
+      - name: set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: "microsoft"
+          cache: 'gradle'
+
+      - name: Generate aboutLibraries.json
+        run: ./gradlew exportLibraryDefinitions
+
+      - name: Build debug APK (FOSS)
+        run: ./gradlew androidApp:assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: simpmusic-gear-visualizer-debug
+          path: androidApp/build/outputs/apk/debug/*.apk
