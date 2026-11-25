@@ -1,4 +1,5 @@
 name: Build debug APK (gear visualizer)
+# Builds the debug APK for the gear visualizer branch.
 on:
   workflow_dispatch:
   push:
